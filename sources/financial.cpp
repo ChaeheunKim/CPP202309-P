@@ -8,11 +8,11 @@ using namespace std;
 //청년 정책 클래스
 class YouthPolicy {
 private:
-	char *FieldPolicy;
-	char* RegionPolicy;
-	char* FieldSelect;//분야 구분 변수
-	char* RegionSelect; //지역 구분 변수
-	char* Policy;// 정책 변수
+	char FieldPolicy;
+	char RegionPolicy;
+	char FieldSelect;//분야 구분 변수
+	char RegionSelect; //지역 구분 변수
+	char Policy;// 정책 변수
 public:
 	void Field();
 	void Region();
@@ -22,14 +22,14 @@ public:
 //청년 정책 분야 입력 함수
 void YouthPolicy::Field() {
 	char FieldPolicy;
-	cout << "정책 분야를 선택하세요" << endl;
+	cout << "정책 분야를 선택하세요(종료 시 0)" << endl;
 	cout << "분야 전체/ 일자리/ 주거/ 교육/ 복지.문화/ 참여.권리" << endl;
 	cin >> FieldPolicy;
 }
 //청년 정책 지역 입력 함수
 void YouthPolicy::Region() {
 	char RegionPolicy;
-	cout << "지역을 선택하세요" << endl;
+	cout << "지역을 선택하세요(종료 시 0)" << endl;
 	cout << "지역 전체/중앙/서울/부산/대구/인천/광주/대전/울산/경기/강원/충북/충남/전북/전남/경북/경남/제주/세종" << endl;
 	cin >> RegionPolicy;
 }
@@ -54,7 +54,11 @@ void YouthPolicy::PolicyShow() {
 }
 int main() {
 	YouthPolicy yp;
-	yp.Field();
-	yp.Region();
-	yp.PolicyShow();
+	while (true) {
+		yp.Field();
+		yp.Region();
+		yp.PolicyShow();
+		if ((FieldPolicy == 0) or (RegionPoicly == 0))
+			break;
+	}
 }

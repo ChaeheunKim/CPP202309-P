@@ -20,16 +20,28 @@ public:
 
         vector<vector<string>> data;
         string line;
+        string currentRow;
         while (getline(in, line)) {
-            vector<string> row = readRow(line);
+            currentRow += line;
+
+            // 큰 텍스트 블록을 묶은 경우 처리
+            if (isInsideQuotes(currentRow)) {
+                continue;
+            }
+
+            vector<string> row = readRow(currentRow);
             if (!row.empty()) {
                 data.push_back(row);
             }
+
+            // currentRow 초기화
+            currentRow.clear();
         }
 
         in.close();
         return data;
     }
+
     //분야,지역 에 맞는 값 출력 함수
     void PrintValue(const string& columnName1, const string& value1,
         const string& columnName2, const string& value2,
@@ -87,6 +99,8 @@ public:
         }
     }
 
+
+
     // CSV 파일에서 특정 조건을 만족하는 행을 std::vector에 저장하는 함수
     vector<vector<string>> getInfo(const string& Region, const string& Field) {
         vector<vector<string>> result;
@@ -132,13 +146,24 @@ private:
     string filename_;
     char delimiter_;
 
+    bool isInsideQuotes(const string& s) {
+        int count = 0;
+        for (char c : s) {
+            if (c == '"') {
+                count++;
+            }
+        }
+        return count % 2 != 0;  // 따옴표 개수가 홀수이면 따옴표 안에 있다고 판단
+    }
+
     vector<string> readRow(const string& line) {
         stringstream ss(line);
         vector<string> row;
 
         string cell;
         while (getline(ss, cell, delimiter_)) {
-            row.push_back(cell);
+
+        row.push_back(cell);
         }
 
         return row;

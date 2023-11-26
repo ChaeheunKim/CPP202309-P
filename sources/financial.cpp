@@ -20,7 +20,7 @@ private:
     //분야 벡터
     vector<string> Fields = { "일자리", "주거", "교육", "복지", "참여" }; 
     //지역 벡터
-    vector<string> Regions = { "중앙", "서울", "부산", "대구", "인천", "광주", "대전", "울산", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주", "세종" };
+    vector<string> Regions = { "중앙부처", "서울", "부산", "대구", "인천", "광주", "대전", "울산", "경기", "강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주", "세종" };
    // 필터링 된 정책 벡터
     vector <string> Policy = {};
 
@@ -46,7 +46,7 @@ public:
     // 청년 정책 지역 입력 함수
     void Region() {
         cout << "지역을 선택하세요(종료 시 0)" << endl;
-        cout << "중앙/서울/부산/대구/인천/광주/대전/울산/경기/강원/충북/충남/전북/전남/경북/경남/제주/세종" << endl;
+        cout << "중앙부처/서울/부산/대구/인천/광주/대전/울산/경기/강원/충북/충남/전북/전남/경북/경남/제주/세종" << endl;
         cin >> RegionPolicy;   
 
         while (!isValid(RegionPolicy, Regions)) {
@@ -57,11 +57,10 @@ public:
 
     // 입력받은 지역과 분야에 해당하는 정책 출력 함수
     void PolicyShow() {
-        CSVReader csvReader("C:/Users/chee0/Downloads/youth_data.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
+        CSVReader csvReader("C:/Users/chee0/Downloads/download/YouthData.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
 
         // 입력받은 분야와 지역을 사용하여 정책을 필터링하고 출력
         csvReader.PrintValue("youthPolicy.polyBizSecd", RegionPolicy, "youthPolicy.polyRlmCd", FieldPolicy, "youthPolicy.polyBizSjnm");
-        //TO DO: 세부 기능 3: 자세한 정보 출력
         cout << "자세한 정보를 보고 싶다면 1을 입력하세요" << endl;
         cin >> input;
         if (input == "1")

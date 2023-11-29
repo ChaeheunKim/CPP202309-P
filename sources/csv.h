@@ -5,11 +5,13 @@
 #include <vector>
 #include <string>
 
-using namespace std; // std 네임스페이스 사용
+using namespace std; 
 //엑셀 읽어오는 클래스
 class CSVReader {
 public:
     CSVReader(const string& filename, char delimiter = ',') : filename_(filename), delimiter_(delimiter) {}
+    // 필터링 된 정책 벡터
+    vector <string> Policy = {};
 
     vector<vector<string>> readData() {
         ifstream in(filename_);
@@ -42,10 +44,11 @@ public:
         return data;
     }
 
-    //분야,지역 에 맞는 값 출력 함수
+    //사용자가 입력한 조건에 맞는 정책 출력 함수
     void PrintValue(const string& columnName1, const string& value1,
         const string& columnName2, const string& value2,
         const string& outputColumn) {
+        int num = 1;//조건에 맞는 정책 번호 변수
         vector<vector<string>> data = readData();
         if (data.empty()) {
             cerr << "Empty data" << endl;
@@ -75,7 +78,7 @@ public:
                 data[i][columnIndex1] == value1 && data[i][columnIndex2] == value2) {
                 if (outputColumn == "") {
                     for (const auto& cell : data[i]) {
-                        cout << "[" << cell << "]" << "\t";
+                        cout <<" [" << cell << "]" << "\t";
                     }
                 }
                 else {
@@ -88,7 +91,9 @@ public:
                     }
 
                     if (outputIndex != -1) {
-                        cout << "[" << data[i][outputIndex] << "]";
+                        cout <<num<< "[" << data[i][outputIndex] << "]";
+                        num += 1;
+                        Policy.push_back(data[i][outputIndex]);
                     }
                     else {
                         cerr << "Output column not found" << endl;
@@ -130,18 +135,23 @@ public:
         return result;
     }
 
-    // CSV 파일에서 특정 조건을 만족하는 행을 출력하는 함수
+    // 필터링 된 정책 자세한 정보를 출력하는 함수
     void PrintInfo(const string& Region, const string& Field) {
         vector<vector<string>> info = getInfo(Region, Field);
-
+        int input;
+        cout << "자세한 정보를 보고 싶은 정책의 번호를 입력하세요(없으면 0)" << endl;
+        cin >> input;
        // 저장된 행들 출력
-        for (const auto& row : info) {
-            for (const auto& cell : row) {
-                cout << "[" << cell << "]" << "\n";
-            }
-            cout << endl;
+        if (input != 0)
+            cout << Policy[num - 1] << endl;
+            // for (const auto& row : info) {
+            //for (const auto& cell : row) {
+                //cout << "[" << cell << "]" << "\n";
+            //}
+            //cout << endl;
         }
-    }
+        
+    
 private:
     string filename_;
     char delimiter_;
@@ -169,4 +179,5 @@ private:
         return row;
     }
 };
+
 

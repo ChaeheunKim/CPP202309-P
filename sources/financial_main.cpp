@@ -61,11 +61,9 @@ public:
 
         // 입력받은 분야와 지역을 사용하여 정책을 필터링하고 출력
         csvReader.PrintValue("youthPolicy.polyBizSecd", RegionPolicy, "youthPolicy.polyRlmCd", FieldPolicy, "youthPolicy.polyBizSjnm");
-        cout << "자세한 정보를 보고 싶다면 1을 입력하세요" << endl;
-        cin >> input;
-        if (input == "1")
-            csvReader.PrintInfo( RegionPolicy, FieldPolicy);
+        csvReader.PrintInfo(RegionPolicy, FieldPolicy);
     }
+   
 
     // FieldPolicy 값 가져오는 함수
     string getFieldPolicy() const {

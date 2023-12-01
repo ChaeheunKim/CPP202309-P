@@ -4,7 +4,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
-
+int num; //조건에 맞는 정책 번호 변수
 using namespace std; 
 //엑셀 읽어오는 클래스
 class CSVReader {
@@ -48,7 +48,7 @@ public:
     void PrintValue(const string& columnName1, const string& value1,
         const string& columnName2, const string& value2,
         const string& outputColumn) {
-        int num = 1;//조건에 맞는 정책 번호 변수
+        int num = 1;
         vector<vector<string>> data = readData();
         if (data.empty()) {
             cerr << "Empty data" << endl;
@@ -91,7 +91,7 @@ public:
                     }
 
                     if (outputIndex != -1) {
-                        cout <<num<< "[" << data[i][outputIndex] << "]";
+                        cout << num<< "[" << data[i][outputIndex] << "]";
                         num += 1;
                         Policy.push_back(data[i][outputIndex]);
                     }
@@ -134,22 +134,28 @@ public:
         file.close();
         return result;
     }
-
     // 필터링 된 정책 자세한 정보를 출력하는 함수
     void PrintInfo(const string& Region, const string& Field) {
         vector<vector<string>> info = getInfo(Region, Field);
         int input;
         cout << "자세한 정보를 보고 싶은 정책의 번호를 입력하세요(없으면 0)" << endl;
         cin >> input;
-       // 저장된 행들 출력
-        if (input != 0)
-            cout << Policy[num - 1] << endl;
-            // for (const auto& row : info) {
-            //for (const auto& cell : row) {
-                //cout << "[" << cell << "]" << "\n";
-            //}
-            //cout << endl;
+        // 저장된 행들 출력
+        if (input!=0)
+            // 출력할 행이 있는지 확인
+            if (input >= 1 && input <= Policy.size()) {
+                // 보고싶은 정책 제세한 정보 출력
+                for (const auto& cell : info[input - 1]) {
+                    cout << "[" << cell << "]" << "\t";
+                }
+                cout << endl;
+            }
+            else {
+                cout << "입력한 번호의 정책이 존재하지 않습니다." << endl;
+            }
         }
+    }
+    
         
     
 private:
@@ -179,5 +185,4 @@ private:
         return row;
     }
 };
-
 

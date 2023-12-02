@@ -117,42 +117,149 @@ public:
         }
 
         std::string line;
+        string currentRow;
+        bool issideQuotes = false;
         while (getline(file, line)) {
-            istringstream iss(line);
-            string token;
-            vector<string> tokens;
+            currentRow += line;
+            // 큰 텍스트 블록을 묶은 경우 처리
+            issideQuotes = isInsideQuotes(currentRow);
 
-            while (getline(iss, token, ',')) {
-                tokens.push_back(token);
-            }
+            // 큰 텍스트 블록이 끝났을 때
+            if (!issideQuotes) {
+                vector<string> tokens;
+                istringstream iss(currentRow);
+                string token;
 
-            if (tokens.size() >= 33 && tokens[2] == Region && tokens[32] == Field) {
-                result.push_back(tokens);
+                while (getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+
+                // 특정 조건을 만족하는 행인지 확인
+                if (tokens.size() >= 33 && tokens[2] == Region && tokens[32] == Field) {
+                    result.push_back(tokens);
+                }
+
+                // currentRow 초기화
+                currentRow.clear();
             }
         }
 
         file.close();
         return result;
     }
+
     // 필터링 된 정책 자세한 정보를 출력하는 함수
     void PrintInfo(const string& Region, const string& Field) {
         vector<vector<string>> info = getInfo(Region, Field);
-        int input;
+        int input=0;
         cout << "자세한 정보를 보고 싶은 정책의 번호를 입력하세요(없으면 0)" << endl;
         cin >> input;
         // 저장된 행들 출력
-        if (input!=0)
+        while (input != 0) {
             // 출력할 행이 있는지 확인
             if (input >= 1 && input <= Policy.size()) {
-                // 보고싶은 정책 제세한 정보 출력
+                // 입력받은 행의 열들 출력
                 for (const auto& cell : info[input - 1]) {
-                    cout << "[" << cell << "]" << "\t";
+                    // 열에서 필요한 정보만 출력
+                    if (cell != "-") {
+                        if ((&cell - &info[input - 1][0] >= 2) or (&cell - &info[input - 1][0]==9) or (&cell - &info[input - 1][0] == 32))
+                            switch (&cell - &info[input - 1][0]) {
+                            case 2:
+                                cout << "지역: [" << cell << "]" << endl;
+                                break;
+                            case 3:
+                                cout << "기관 및 지자체 구분: [" << cell << "]" << endl;
+                                break;
+                            case 4:
+                                cout << "정책명: [" << cell << "]" << endl;
+                                break;
+                            case 5:
+                                cout << "정책 소개: [" << cell << "]" << endl;
+                                break;
+                            case 6:
+                                cout << "지원 내용: [" << cell << "]" << endl;
+                                break;
+                            case 7:
+                                cout << "지원 규모: [" << cell << "]" << endl;
+                                break;
+                            case 8:
+                                cout << "사업운영기간: [" << cell << "]" << endl;
+                                break;
+                            case 10:
+                                cout << "사업신청기간: [" << cell << "]" << endl;
+                                break;
+                            case 11:
+                                cout << "연령: [" << cell << "]" << endl;
+                                break;
+                            case 12:
+                                cout << "전공 요건: [" << cell << "]" << endl;
+                                break;
+                            case 13:
+                                cout << "취업 상태: [" << cell << "]" << endl;
+                                break;
+                            case 14:
+                                cout << "특화 분야: [" << cell << "]" << endl;
+                                break;
+                            case 15:
+                                cout << "학력 요건: [" << cell << "]" << endl;
+                                break;
+                            case 16:
+                                cout << "거주지 및 소득조건: [" << cell << "]" << endl;
+                                break;
+                            case 17:
+                                cout << "추가단서 사항: [" << cell << "]" << endl;
+                                break;
+                            case 18:
+                                cout << "참여 제한 대상: [" << cell << "]" << endl;
+                                break;
+                            case 19:
+                                cout << "신청 절차: [" << cell << "]" << endl;
+                                break;
+                            case 20:
+                                cout << "제출 서류: [" << cell << "]" << endl;
+                                break;
+                            case 21:
+                                cout << "심사 발표: [" << cell << "]" << endl;
+                                break;
+                            case 22:
+                                cout << "신청 사이트 주소: [" << cell << "]" << endl;
+                                break;
+                            case 23:
+                                cout << "참고 사이트 URL1: [" << cell << "]" << endl;
+                                break;
+                            case 24:
+                                cout << "참고 사이트 URL2 : [" << cell << "]" << endl;
+                                break;
+                            case 25:
+                                cout << "주관 부처 : [" << cell << "]" << endl;
+                                break;
+                            case 26:
+                                cout << "주관부처 담당자 이름 : [" << cell << "]" << endl;
+                                break;
+                            case 27:
+                                cout << "주관부처 담당자 연락처 : [" << cell << "]" << endl;
+                                break;
+                            case 28:
+                                cout << "운영기관명 : [" << cell << "]" << endl;
+                                break;
+                            case 29:
+                                cout << "운영기관 담당자 이름 : [" << cell << "]" << endl;
+                                break;
+                            case 30:
+                                cout << "운영기관 담당자 연락처 : [" << cell << "]" << endl;
+                                break;
+                            case 31:
+                                cout << "기타사항 : [" << cell << "]" << endl;
+                                break;
+                           }
+                    }
                 }
-                cout << endl;
             }
             else {
                 cout << "입력한 번호의 정책이 존재하지 않습니다." << endl;
             }
+            cout << "자세한 정보를 보고 싶은 정책의 번호를 입력하세요(없으면 0)" << endl;
+            cin >> input;
         }
     }
     

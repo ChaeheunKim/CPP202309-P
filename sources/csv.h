@@ -264,7 +264,7 @@ public:
         }
     }
     //특정 은행 정보 희망계좌 정보 가져오기(앞선 getinfo와 합칠 필요성 있음)
-    vector<vector<string>> GetInfo(const string& Region) {
+    vector<vector<string>> GetInfo(const string& bank) {
         vector<vector<string>> result;
 
         ifstream file(filename_);
@@ -292,7 +292,7 @@ public:
                 }
 
                 // 특정 조건을 만족하는 행인지 확인
-                if (tokens[0] == Region) {
+                if (tokens[0] == bank) {
                     result.push_back(tokens);
                 }
 

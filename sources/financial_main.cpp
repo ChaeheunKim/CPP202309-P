@@ -5,6 +5,7 @@
 #include <string>
 #include "csv.h" //엑셀 데이터 가져오는 코드
 using namespace std;
+//기능 2 - 세부기능 2 구현 중(청년도약계좌 외에 다른 금융상품 종류는 실행 X)
 
 //기능 1
 //데이터는 온통청년 사이트 오픈 API 사용
@@ -89,15 +90,15 @@ private:
     vector<string>  Banks = {"NH농협은행",	"신한은행","우리은행","SC제일은행","하나은행",	 "IBK기업은행",	"KB국민은행","DGB대구은행","BNK부산은행","광주은행","전북은행","BNK경남은행"};
 
 
-    //TO DO: 세부 기능 2 : 사용자 상황 맞춤 금융 정보 출력
+    
 public:
     //유효성 검증 함수
     bool isValid(const string& userInput, const vector<string>& validOptions) {
         return userInput == "0" || find(validOptions.begin(), validOptions.end(), userInput) != validOptions.end();
     }
-
-    // 청년 정책 분야 입력 함수
-    void Bank() {
+//TO DO: 세부 기능 2 : 사용자 상황 맞춤 금융 정보 출력
+    // 은행명 입력 함수
+    void Bank() { 
         cout << "은행을 선택하세요(종료 시 0)" << endl;
         cout << "NH농협은행 /신한은행 /우리은행 /SC제일은행 /하나은행 /IBK기업은행 /KB국민은행 /DGB대구은행 /BNK부산은행 /광주은행 /전북은행 /BNK경남은행" << endl;
         cin >> BankType;
@@ -146,13 +147,13 @@ int main() {
     YouthPolicy yp;
     YouthFinancial yf;
     while (true) {
-        yp.Field();
+            yp.Field();
             if (yp.getFieldPolicy() == "0")   //0  입력하면 종료
                 break;
-        yp.Region();
+            yp.Region();
             if (yp.getRegionPolicy() == "0")
                 break;
-        yp.PolicyShow();
+            yp.PolicyShow();
         yf.Bank();
         if (yf.getBankType() == "0")
             break;

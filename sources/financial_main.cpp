@@ -54,7 +54,7 @@ public:
             cin >> RegionPolicy;
         }
     }
-
+    //TO DO: 세부 기능 3 : 자세한 정보 출력
     // 입력받은 지역과 분야에 해당하는 정책 출력 함수
     void PolicyShow() {
         CSVReader csvReader("C:/Users/chee0/Downloads/download/YouthData.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
@@ -75,19 +75,91 @@ public:
         return RegionPolicy;
     }
 };
+//기능 2 : 은행 별 금융상품 정보 출력
+//TO DO: 세부 기능 1: 각 은행사 정보 수집 후 세분화
+//각 은행사 홈페이지 정보 참고(금리 기준 2023.12.03)
+class YouthFinancial {
+private:
+    string FinancialType;//금융상품 종류 입력 받는 변수
+    string BankType;//은행 입력 받는 변수
+    string input;
+    //금융상품 종류 벡터
+    vector<string> FinancialItem = { "청년도약계좌", "청년희망적금", "기타 금융 상품"};
+    //은행 벡터
+    vector<string>  Banks = {"NH농협은행",	"신한은행","우리은행","SC제일은행","하나은행",	 "IBK기업은행",	"KB국민은행","DGB대구은행","BNK부산은행","광주은행","전북은행","BNK경남은행"};
+
+
+    //TO DO: 세부 기능 2 : 사용자 상황 맞춤 금융 정보 출력
+public:
+    //유효성 검증 함수
+    bool isValid(const string& userInput, const vector<string>& validOptions) {
+        return userInput == "0" || find(validOptions.begin(), validOptions.end(), userInput) != validOptions.end();
+    }
+
+    // 청년 정책 분야 입력 함수
+    void Bank() {
+        cout << "은행을 선택하세요(종료 시 0)" << endl;
+        cout << "NH농협은행 /신한은행 /우리은행 /SC제일은행 /하나은행 /IBK기업은행 /KB국민은행 /DGB대구은행 /BNK부산은행 /광주은행 /전북은행 /BNK경남은행" << endl;
+        cin >> BankType;
+
+        while (!isValid(BankType,Banks)) {
+            cout << "잘못된 입력입니다. 다시 입력하세요." << endl;
+            cin >> BankType;
+        }
+    }
+
+    // 금융 상품 입력 함수
+    void Item() {
+        cout << "금융 상품을 선택하세요(종료 시 0)" << endl;
+        cout << "청년도약계좌 /청년희망적금 /기타 금융 상품" << endl;
+        cin >> FinancialType;
+
+        while (!isValid(FinancialType, FinancialItem)) {
+            cout << "잘못된 입력입니다. 다시 입력하세요." << endl;
+            cin >> FinancialType;
+        }
+    }
+   
+    // 입력받은 은행에 맞춘 청년도약계좌 정보 출력 함수
+    void FinancialShow() {
+        if (FinancialType == "청년도약계좌") {
+            CSVReader csvReader("C:/Users/chee0/Downloads/financial.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
+            csvReader.YouthAccount(BankType);
+        }
+    }
+
+
+    // BankType 값 가져오는 함수
+    string getBankType() const {
+        return BankType;
+    }
+
+    // FinancialType 값 가져오는 함수
+    string getFinancialType() const {
+        return FinancialType;
+    }
+};
+
 
 
 int main() {
     YouthPolicy yp;
+    YouthFinancial yf;
     while (true) {
-            yp.Field();
+        yp.Field();
             if (yp.getFieldPolicy() == "0")   //0  입력하면 종료
                 break;
-            yp.Region();
+        yp.Region();
             if (yp.getRegionPolicy() == "0")
                 break;
-            yp.PolicyShow();
-
+        yp.PolicyShow();
+        yf.Bank();
+        if (yf.getBankType() == "0")
+            break;
+        yf.Item();
+        if (yf.getFinancialType() == "0")
+            break;
+        yf.FinancialShow();
 
     }
 

@@ -12,7 +12,7 @@ public:
     CSVReader(const string& filename, char delimiter = ',') : filename_(filename), delimiter_(delimiter) {}
     // 필터링 된 정책 벡터
     vector <string> Policy = {};
-
+    //엑셀 파일 읽어오기
     vector<vector<string>> readData() {
         ifstream in(filename_);
         if (!in.is_open()) {
@@ -228,7 +228,7 @@ public:
                                 cout << "참고 사이트 URL1: [" << cell << "]" << endl;
                                 break;
                             case 24:
-                                cout << "참고 사이트 URL2 : [" << cell << "]" << endl;
+                                cout << "참고 사이트 URL1 : [" << cell << "]" << endl;
                                 break;
                             case 25:
                                 cout << "주관 부처 : [" << cell << "]" << endl;
@@ -255,6 +255,7 @@ public:
                     }
                 }
             }
+            // 벗어난 번호를 입력했을 경우 오류 출력
             else {
                 cout << "입력한 번호의 정책이 존재하지 않습니다." << endl;
             }
@@ -262,13 +263,100 @@ public:
             cin >> input;
         }
     }
-    
+    //특정 은행 정보 희망계좌 정보 가져오기(앞선 getinfo와 합칠 필요성 있음)
+    vector<vector<string>> GetInfo(const string& Region) {
+        vector<vector<string>> result;
+
+        ifstream file(filename_);
+        if (!file.is_open()) {
+            cerr << "파일을 열 수 없습니다." << endl;
+            return result;
+        }
+
+        std::string line;
+        string currentRow;
+        bool issideQuotes = false;
+        while (getline(file, line)) {
+            currentRow += line;
+            // 큰 텍스트 블록을 묶은 경우 처리
+            issideQuotes = isInsideQuotes(currentRow);
+
+            // 큰 텍스트 블록이 끝났을 때
+            if (!issideQuotes) {
+                vector<string> tokens;
+                istringstream iss(currentRow);
+                string token;
+
+                while (getline(iss, token, ',')) {
+                    tokens.push_back(token);
+                }
+
+                // 특정 조건을 만족하는 행인지 확인
+                if (tokens[0] == Region) {
+                    result.push_back(tokens);
+                }
+
+                // currentRow 초기화
+                currentRow.clear();
+            }
+        }
+
+        file.close();
+        return result;
+    }
+    //사용자가 입력한 은행에 따른 청년도약계좌 정보 출력 함수
+    void YouthAccount( const string& value) {
+        vector<vector<string>> info = GetInfo(value);
+        // 저장된 행들 출력
+        for (const auto& cell : info[0]) {
+            //     // 각 열의 정보 출력 
+          switch (&cell - &info[0][0]){
+                    case 0:
+                        cout << "은행명: [" << cell << "]" << endl;
+                        break;
+                    case 1:
+                        cout << "기본 금리(3년 고정): [" << cell << "]" << endl;
+                        break;
+                    case 2:
+                        cout << "소득 우대금리: [" << cell << "]" << endl;
+                        break;
+                    case 3:
+                        cout << "적금담보대가산금리(만기일시상환대출): [" << cell << "]" << endl;
+                        break;
+                    case 4:
+                        cout << "적금담보대가산금리(한도대출): [" << cell << "]" << endl;
+                        break;
+                    case 5:
+                        cout << "적금담보대가산금리(대출가능한도): [" << cell << "]" << endl;
+                        break;
+                    case 6:
+                        cout << "은행별 우대금리: [" << cell << "]" << endl;
+                        break;
+                    case 8:
+                        cout << "만기 후 금리: [" << cell << "]" << endl;
+                        break;
+                    case 9:
+                        cout << "우대조건: [" << cell << "]" << endl;
+                        break;
+                    case 10:
+                        cout << "기타 유의사항: [" << cell << "]" << endl;
+                        break;
+                    case 11:
+                        cout << "참고 링크: [" << cell << "]" << endl;
+                        break;
+
+
+                    }
+                }
+
+            }
         
+    
     
 private:
     string filename_;
     char delimiter_;
-
+    //따옴표 안에 쉼표가 있을 경우의 처리
     bool isInsideQuotes(const string& s) {
         int count = 0;
         for (char c : s) {
@@ -278,7 +366,7 @@ private:
         }
         return count % 2 != 0;  // 따옴표 개수가 홀수이면 따옴표 안에 있다고 판단
     }
-
+    // 쉼표로 구분하여 행 읽기(csv 파일)
     vector<string> readRow(const string& line) {
         stringstream ss(line);
         vector<string> row;

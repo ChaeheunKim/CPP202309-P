@@ -252,7 +252,9 @@ public:
                                 cout << "기타사항 : [" << cell << "]" << endl;
                                 break;
                            }
+                        cout << endl;
                     }
+         
                 }
             }
             // 벗어난 번호를 입력했을 경우 오류 출력
@@ -263,7 +265,7 @@ public:
             cin >> input;
         }
     }
-    //특정 은행 정보 희망계좌 정보 가져오기(앞선 getinfo와 합칠 필요성 있음)
+    //특정 은행 정보 희망계좌 정보 가져오기
     vector<vector<string>> GetInfo(const string& bank) {
         vector<vector<string>> result;
 
@@ -347,9 +349,44 @@ public:
 
 
                     }
+          cout << endl;
                 }
 
             }
+    //사용자가 입력한 은행에 따른 청년도약계좌 정보 출력 함수
+    void FinancialManual(const string& name) {
+        vector<vector<string>> info = GetInfo(name);
+        // 저장된 행들 출력
+        for (const auto& cell : info[0]) {
+            // 각 열의 정보 출력 
+            switch (&cell - &info[0][0]) {
+            case 1:
+                cout << cell << endl;
+                break;
+            case 2:
+                cout << "연령 조건: [" << cell << "]" << endl;
+                break;
+            case 3:
+                cout << "소득 조건: [" << cell << "]" << endl;
+                break;
+            case 4:
+                cout << "기간: [" << cell << "]" << endl;
+                break;
+            case 5:
+                cout << "월 납입금: [" << cell << "]" << endl;
+                break;
+            case 6:
+                cout << "정부 지원금: [" << cell << "]" << endl;
+                break;
+            case 7:
+                cout << "기타 사항: [" << cell << "]" << endl;
+                break;
+            case 8:
+                cout << "참고 URL: [" << cell << "]" << endl;
+                break;
+            }
+        }
+    }
         
     
     

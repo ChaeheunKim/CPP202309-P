@@ -5,8 +5,6 @@
 #include <string>
 #include "csv.h" //엑셀 데이터 가져오는 코드
 using namespace std;
-//기능 2 - 세부기능 2 구현 중(청년도약계좌 외에 다른 금융상품 종류는 실행 X)
-
 //기능 1
 //데이터는 온통청년 사이트 오픈 API 사용
 
@@ -84,8 +82,9 @@ private:
     string FinancialType;//금융상품 종류 입력 받는 변수
     string BankType;//은행 입력 받는 변수
     string input;
+    string ManuaInput; // 원하는 상품 설명 입력 받는 변수
     //금융상품 종류 벡터
-    vector<string> FinancialItem = { "청년도약계좌", "청년희망적금", "기타 금융 상품"};
+    vector<string> FinancialItem = { "청년도약계좌", "청년희망적금", "기타금융상품","금융상품설명"};
     //은행 벡터
     vector<string>  Banks = {"NH농협은행",	"신한은행","우리은행","SC제일은행","하나은행",	 "IBK기업은행",	"KB국민은행","DGB대구은행","BNK부산은행","광주은행","전북은행","BNK경남은행"};
 
@@ -112,21 +111,32 @@ public:
     // 금융 상품 입력 함수
     void Item() {
         cout << "금융 상품을 선택하세요(종료 시 0)" << endl;
-        cout << "청년도약계좌 /청년희망적금 /기타 금융 상품" << endl;
+        cout << "청년도약계좌 /청년희망적금 /기타금융상품/금융상품설명" << endl;
         cin >> FinancialType;
 
         while (!isValid(FinancialType, FinancialItem)) {
             cout << "잘못된 입력입니다. 다시 입력하세요." << endl;
             cin >> FinancialType;
         }
-    }
-   
-    // 입력받은 은행에 맞춘 청년도약계좌 정보 출력 함수
-    void FinancialShow() {
-        if (FinancialType == "청년도약계좌") {
+        // 입력받은 상품에 맞춘 정보 출력 
+        if (FinancialType == "청년도약계좌" || FinancialType=="청년희망적금") {
+            //은행 입력받기
+            YouthFinancial Bank();
             CSVReader csvReader("C:/Users/chee0/Downloads/financial.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
             csvReader.YouthAccount(BankType);
         }
+        else if (FinancialType == "금융상품설명") {
+            YouthFinancial Manualshow();
+        }
+    }
+   
+
+    void ManualShow() {
+            cout << "설명을 원하는 상품을 적어주세요." << endl;
+            cout << "청년도약계좌/청년희망적금/기타금융상품" << endl;
+            cin >> ManuaInput;
+            CSVReader csvReader("C:/Users/chee0/Downloads/info.csv");
+            csvReader.FinancialManual(ManuaInput);
     }
 
 
@@ -154,13 +164,9 @@ int main() {
             if (yp.getRegionPolicy() == "0")
                 break;
             yp.PolicyShow();
-        yf.Bank();
-        if (yf.getBankType() == "0")
-            break;
-        yf.Item();
-        if (yf.getFinancialType() == "0")
-            break;
-        yf.FinancialShow();
+            yf.Item();
+            if (yf.getFinancialType() == "0")
+              break;
 
     }
 

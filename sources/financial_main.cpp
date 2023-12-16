@@ -95,14 +95,15 @@ public:
     bool isValid(const string& userInput, const vector<string>& validOptions) {
         return userInput == "0" || find(validOptions.begin(), validOptions.end(), userInput) != validOptions.end();
     }
-//TO DO: 세부 기능 2 : 사용자 상황 맞춤 금융 정보 출력
+
+    //TO DO: 세부 기능 2 : 사용자 상황 맞춤 금융 정보 출력
     // 은행명 입력 함수
-    void Bank() { 
+    void Bank() {
         cout << "은행을 선택하세요(종료 시 0)" << endl;
         cout << "NH농협은행 /신한은행 /우리은행 /SC제일은행 /하나은행 /IBK기업은행 /KB국민은행 /DGB대구은행 /BNK부산은행 /광주은행 /전북은행 /BNK경남은행" << endl;
         cin >> BankType;
 
-        while (!isValid(BankType,Banks)) {
+        while (!isValid(BankType, Banks)) {
             cout << "잘못된 입력입니다. 다시 입력하세요." << endl;
             cin >> BankType;
         }
@@ -118,25 +119,22 @@ public:
             cout << "잘못된 입력입니다. 다시 입력하세요." << endl;
             cin >> FinancialType;
         }
-        // 입력받은 상품에 맞춘 정보 출력 
-        if (FinancialType == "청년도약계좌" || FinancialType=="청년희망적금") {
-            //은행 입력받기
-            YouthFinancial Bank();
-            CSVReader csvReader("C:/Users/chee0/Downloads/financial.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
-            csvReader.YouthAccount(BankType);
-        }
-        else if (FinancialType == "금융상품설명") {
-            YouthFinancial Manualshow();
-        }
     }
-   
+
+    // 입력받은 은행에 맞춘 청년도약계좌 정보 출력 함수
+    void FinancialShow() {
+
+        CSVReader csvReader("C:/Users/chee0/Downloads/financial.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
+        csvReader.YouthAccount(BankType);
+    }
+
 
     void ManualShow() {
-            cout << "설명을 원하는 상품을 적어주세요." << endl;
-            cout << "청년도약계좌/청년희망적금/기타금융상품" << endl;
-            cin >> ManuaInput;
-            CSVReader csvReader("C:/Users/chee0/Downloads/info.csv");
-            csvReader.FinancialManual(ManuaInput);
+        cout << "설명을 원하는 상품을 적어주세요." << endl;
+        cout << "청년도약계좌/청년희망적금/기타금융상품" << endl;
+        cin >> ManuaInput;
+        CSVReader csvReader("C:/Users/chee0/Downloads/Info2.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
+        csvReader.FinancialManual(ManuaInput);
     }
 
 
@@ -156,7 +154,14 @@ public:
 int main() {
     YouthPolicy yp;
     YouthFinancial yf;
+    int userinput;
     while (true) {
+        cout << "알고싶은 정보를 선택하세요." << endl;
+        cout << "-------------------------------" << endl;
+        cout << "1.정책 정보 2.금융상품정보" << endl;
+        cout << "-------------------------------" << endl;
+        cin >> userinput;
+        if (userinput == 1) {
             yp.Field();
             if (yp.getFieldPolicy() == "0")   //0  입력하면 종료
                 break;
@@ -164,14 +169,21 @@ int main() {
             if (yp.getRegionPolicy() == "0")
                 break;
             yp.PolicyShow();
+        }
+        if (userinput == 2) {
             yf.Item();
             if (yf.getFinancialType() == "0")
-              break;
-
+                break;
+            if (yf.getFinancialType() == "청년도약계좌" or yf.getFinancialType() == "청년희망적금") {
+                yf.Bank();         // Bank 함수 호출
+                yf.FinancialShow();  // YouthAccount 함수 호출
+            }
+            if (yf.getFinancialType() == "금융상품설명") {
+                yf.ManualShow();  // YouthManual 함수 호출
+            }
+        }
     }
 
     return 0;
 }
-
-
 

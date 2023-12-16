@@ -385,6 +385,7 @@ public:
                 cout << "Âü°í URL: [" << cell << "]" << endl;
                 break;
             }
+            cout << endl;
         }
     }
         

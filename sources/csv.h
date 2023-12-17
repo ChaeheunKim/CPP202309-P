@@ -353,7 +353,7 @@ public:
                 }
 
             }
-    //사용자가 입력한 은행에 따른 청년도약계좌 정보 출력 함수
+    //금융상품 정보 출력 함수
     void FinancialManual(const string& name) {
         vector<vector<string>> info = GetInfo(name);
         // 저장된 행들 출력

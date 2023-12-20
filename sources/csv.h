@@ -4,8 +4,11 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <unordered_map>
+#include <algorithm>
 int num; //조건에 맞는 정책 번호 변수
 using namespace std; 
+unordered_map<string, int> useractivity; //사용자 입력 횟수
 //엑셀 읽어오는 클래스
 class CSVReader {
 public:
@@ -48,14 +51,15 @@ public:
     void PrintValue(const string& columnName1, const string& value1,
         const string& columnName2, const string& value2,
         const string& outputColumn) {
-        int num = 1;
+        int num = 1; // 정책 번호 초기화
+        //데이터 유효성 검증
         vector<vector<string>> data = readData();
         if (data.empty()) {
             cerr << "Empty data" << endl;
             return;
         }
 
-        // 특정 열 찾기
+        // 지역, 분야에 해당하는 열 찾기
         int columnIndex1 = -1;
         int columnIndex2 = -1;
         for (size_t i = 0; i < data[0].size(); ++i) {
@@ -72,7 +76,7 @@ public:
             return;
         }
 
-        // 특정 열에 특정 값 갖는 행 출력
+        // 사용자가 입력한 분야와 지역에 맞는 정책 리스트 출력
         for (size_t i = 1; i < data.size(); ++i) {
             if (columnIndex1 < data[i].size() && columnIndex2 < data[i].size() &&
                 data[i][columnIndex1] == value1 && data[i][columnIndex2] == value2) {
@@ -106,7 +110,7 @@ public:
 
 
 
-    // CSV 파일에서 특정 조건을 만족하는 행을 std::vector에 저장하는 함수
+    // CSV 파일에서 특정 조건을 만족하는 행을 저장하는 함수
     vector<vector<string>> getInfo(const string& Region, const string& Field) {
         vector<vector<string>> result;
 
@@ -152,8 +156,20 @@ public:
     void PrintInfo(const string& Region, const string& Field) {
         vector<vector<string>> info = getInfo(Region, Field);
         int input=0;
+
+        // 사용자의 입력 횟수에 따라 정책 정렬
+        sort(Policy.begin(), Policy.end(),
+            [&](const string& a, const string& b) {
+                return useractivity[a] > useractivity[b];
+            });
+
+        // 상단에 사용자가 많이 찾아본 정책 출력
+        if (useractivity[Policy[0]]>0){
+            cout << " (추천): " << Policy[0] << endl;
+    }
         cout << "자세한 정보를 보고 싶은 정책의 번호를 입력하세요(없으면 0)" << endl;
         cin >> input;
+        useractivity[info[input-1][4]] += 1;
         // 저장된 행들 출력
         while (input != 0) {
             // 출력할 행이 있는지 확인

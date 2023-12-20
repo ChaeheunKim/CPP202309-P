@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 #include "csv.h" //엑셀 데이터 가져오는 코드
-// 기타 금융 상품은 구현 중 입력 하지 말아주세요!
 using namespace std;
 //기능 1
 //데이터는 온통청년 사이트 오픈 API 사용
@@ -165,14 +164,17 @@ public:
 int main() {
     YouthPolicy yp;
     YouthFinancial yf;
-    int userinput;
+    string userinput;
     while (true) {
-        cout << "알고싶은 정보의 번호를 입력하세요." << endl;
+        cout << "알고싶은 정보의 번호를 입력하세요.(종료 시 0)" << endl;
         cout << "-------------------------------" << endl;
         cout << "1.정책 정보 2.금융상품정보" << endl;
         cout << "-------------------------------" << endl;
         cin >> userinput;
-        if (userinput == 1) {
+        if (userinput == "0") {
+            break; //0 입력 시 종료
+        }
+        else if (userinput == "1") {
             yp.Field();
             if (yp.getFieldPolicy() == "0")   //0  입력하면 종료
                 break;
@@ -181,17 +183,20 @@ int main() {
                 break;
             yp.PolicyShow();
         }
-        if (userinput == 2) {
+        else if (userinput == "2") {
             yf.Item();
             if (yf.getFinancialType() == "0")
                 break;
-            if (yf.getFinancialType() == "청년도약계좌" ) {
+            if (yf.getFinancialType() == "청년도약계좌") {
                 yf.Bank();         // Bank 함수 호출
                 yf.FinancialShow();  // YouthAccount 함수 호출
             }
             if (yf.getFinancialType() == "금융상품설명") {
                 yf.ManualShow();  // YouthManual 함수 호출
             }
+        }
+        else {
+            cout << "1 또는 2를 입력해주세요" << endl;
         }
     }
 

@@ -4,17 +4,12 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <unordered_map>
-#include <algorithm>
 int num; //조건에 맞는 정책 번호 변수
 using namespace std; 
-unordered_map<string, int> useractivity; //사용자 입력 횟수
 //엑셀 읽어오는 클래스
 class CSVReader {
 public:
     CSVReader(const string& filename, char delimiter = ',') : filename_(filename), delimiter_(delimiter) {}
-    // 추천 상품 저장 벡터
-    vector <string> recommand = {};
     //엑셀 파일 읽어오기
     vector<vector<string>> readData() {
         ifstream in(filename_);
@@ -99,7 +94,6 @@ public:
                     if (outputIndex != -1) {
                         cout << num << "[" << data[i][outputIndex] << "]";
                         num += 1;
-                        recommand.push_back(data[i][outputIndex]);
                     }
                     else {
                         cerr << "Output column not found" << endl;
@@ -185,7 +179,6 @@ public:
                 input = stoi(inputStr);
 
                 if (input >= 1 && input <= info.size()) {
-                    useractivity[info[input - 1][4]] += 1;
 
                     // 입력받은 행의 열들 출력
                     for (const auto& cell : info[input - 1]) {
@@ -391,7 +384,8 @@ public:
             int input = 0;
                 // 저장된 행들 출력
                 while (true) {
-                    cout << "자세한 정보를 보고 싶은 정책의 번호를 입력하세요(없으면 0)" << endl;
+           
+                    cout << "자세한 정보를 보고 싶은 상품의 번호를 입력하세요(없으면 0)" << endl;
 
                     string inputStr;
                     cin >> inputStr;
@@ -402,9 +396,9 @@ public:
                     if (isnumber(inputStr) == true) {
                         // stoi를 사용하여 문자열을 정수로 변환
                         input = stoi(inputStr);
-
+                        
                         if (input >= 1 && input <= info.size()) {
-                            useractivity[info[input - 1][4]] += 1;
+                            
                             // 입력받은 행의 열들 출력
                             for (const auto& cell : info[input - 1]) {
                                 // 열에서 필요한 정보만 출력
@@ -469,7 +463,7 @@ public:
         int input = 0;
         // 저장된 행들 출력
         while (true) {
-            cout << "자세한 정보를 보고 싶은 정책의 번호를 입력하세요(없으면 0)" << endl;
+            cout << "자세한 정보를 보고 싶은 상품의 번호를 입력하세요(없으면 0)" << endl;
 
             string inputStr;
             cin >> inputStr;
@@ -482,7 +476,7 @@ public:
                 input = stoi(inputStr);
 
                 if (input >= 1 && input <= info.size()) {
-                    useractivity[info[input - 1][4]] += 1;
+                    
                     // 입력받은 행의 열들 출력
                     for (const auto& cell : info[input - 1]) {
                         // 열에서 필요한 정보만 출력
@@ -571,19 +565,6 @@ public:
                 }
                 cout << endl;
             }
-        }
-    }
-    //TO DO: 세부기능 4 사용자의 입력에 따른 추천  출력
-    void Recommand(){    
-        //사용자의 입력 횟수에 따라 정렬
-        sort(recommand.begin(), recommand.end(),
-            [&](const string& a, const string& b) {
-                return useractivity[a] > useractivity[b];
-            });
-
-        // 상단에 사용자가 많이 찾아본 정책/ 금융상품 출력
-        if (useractivity[recommand[0]] > 0) {
-            cout << " (추천): " << recommand[0] << endl;
         }
     }
     

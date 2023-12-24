@@ -88,7 +88,7 @@ private:
     string input;
     string ManuaInput; // 원하는 상품 설명 입력 받는 변수
     //금융상품 종류 
-    vector<string> FinancialItem = { "청년도약계좌", "예금","적금","대출","금융상품설명"};
+    vector<string> FinancialItem = { "청년도약계좌", "예금","적금","금융상품설명"};
     //은행 
     vector<string>  Banks = {"NH농협은행",	"신한은행","우리은행","SC제일은행","하나은행",	 "IBK기업은행",	"KB국민은행","DGB대구은행","BNK부산은행","광주은행","전북은행","BNK경남은행"};
     //예금 종류
@@ -125,9 +125,9 @@ public:
     // 금융 상품 입력 함수
     void Item() {
         cout << "금융 상품을 선택하세요(종료 시 0)" << endl;
-        cout << "-----------------------------------------" << endl;
-        cout << "청년도약계좌/예금/적금/대출/금융상품설명" << endl;
-        cout << "-----------------------------------------"<< endl;
+        cout << "----------------------------------" << endl;
+        cout << "청년도약계좌/예금/적금/금융상품설명" << endl;
+        cout << "----------------------------------"<< endl;
         cin >> FinancialType;
 
         while (!isValid(FinancialType, FinancialItem)) {
@@ -236,10 +236,6 @@ public:
    
 
 
-    // BankType 값 가져오는 함수
-    string getBankType() const {
-        return BankType;
-    }
 
     // FinancialType 값 가져오는 함수
     string getFinancialType() const {
@@ -263,6 +259,8 @@ int main() {
             break; //0 입력 시 종료
         }
         else if (userinput == "1") {
+            cout << "(추천) *중앙부처 - 취업 후 상환 학자금대출" << endl;
+            cout << "       *중앙부처 - 청년 취업 역량 프로그램" << endl;
             yp.Field();
             if (yp.getFieldPolicy() == "0")   //0  입력하면 종료
                 break;
@@ -272,6 +270,7 @@ int main() {
             yp.PolicyShow();
         }
         else if (userinput == "2") {
+            cout << "(추천) *청년도약계좌" << endl;
             yf.Item();
             if (yf.getFinancialType() == "0")
                 break;

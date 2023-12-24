@@ -153,9 +153,9 @@ public:
     }
     //입력이 정수인지 판별하는 함수
     bool isnumber(const std::string& str) {
-        std::istringstream iss(str);
+        istringstream iss(str);
         int number;
-        iss >> std::noskipws >> number;  
+        iss >> noskipws >> number;  
         return iss.eof() && !iss.fail();
     }
 
@@ -180,7 +180,7 @@ public:
 
                 if (input >= 1 && input <= info.size()) {
 
-                    // 입력받은 행의 열들 출력
+                    
                     for (const auto& cell : info[input - 1]) {
                         // 열에서 필요한 정보만 출력
                         if (cell != "-") {
@@ -335,7 +335,6 @@ public:
     //사용자가 입력한 은행에 따른 청년도약계좌 정보 출력 함수
     void YouthAccount( const string& value) {
         vector<vector<string>> info = GetInfo(value);
-        // 저장된 행들 출력
         for (const auto& cell : info[0]) {
             // 각 열의 정보 출력 
           switch (&cell - &info[0][0]){
@@ -378,7 +377,7 @@ public:
 
             }
     
-    //사용자가 입력한 은행에 따른 입출금자유예금 정보 출력 함수
+    //사용자가 입력한 은행에 따른 예금 정보 출력 함수
     void FreeDeposit(const string& bank) {
             vector<vector<string>> info = GetInfo(bank);
             int input = 0;
@@ -399,7 +398,7 @@ public:
                         
                         if (input >= 1 && input <= info.size()) {
                             
-                            // 입력받은 행의 열들 출력
+                            
                             for (const auto& cell : info[input - 1]) {
                                 // 열에서 필요한 정보만 출력
                                 if (cell != "") {
@@ -457,7 +456,7 @@ public:
            }
         }
     
-    //사용자가 입력한 은행에 따른 입출금자유예금 정보 출력 함수
+    //사용자가 입력한 은행에 따른 적금 정보 출력 함수
     void FreeSaving(const string& bank, const string &interest) {
         vector<vector<string>> info = getInfo(bank,interest,0,13);
         int input = 0;
@@ -477,7 +476,7 @@ public:
 
                 if (input >= 1 && input <= info.size()) {
                     
-                    // 입력받은 행의 열들 출력
+                    
                     for (const auto& cell : info[input - 1]) {
                         // 열에서 필요한 정보만 출력
                         if (cell != "") {

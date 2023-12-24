@@ -85,8 +85,7 @@ class YouthFinancial {
 private:
     string FinancialType;//금융상품 종류 입력 받는 변수
     string BankType;//은행 입력 받는 변수
-    string input;
-    string ManuaInput; // 원하는 상품 설명 입력 받는 변수
+    string ManuaInput; // 설명원하는 용어 입력 받는 변수
     //금융상품 종류 
     vector<string> FinancialItem = { "청년도약계좌", "예금","적금","금융상품설명"};
     //은행 
@@ -95,7 +94,7 @@ private:
     vector<string> Deposit = { "입출금자유예금","정기예금"};
     //적금 종류
     vector<string> saving = { "자유적립식","정액적립식" };
-    //금리 종류
+    //금리 계산 방법
     vector<string> interest = {"복리","단리"};
     //금융상품 종류
     vector<string> Finan = { "청년도약계좌","입출금자유예금 ", "정기예금" ,"정액적립식적금","자유적립식적금","단리","복리" };
@@ -165,7 +164,7 @@ public:
             cin >> userdeposit;
         }
     }
-
+    //TO DO 세부기능 3 자세한 금융 정보 출력
     //사용자가 입력한 은행에 맞춘 예적금 세부 정보 출력
     void deposit() {
         string userinterest; //사용자 입력 금리 종류
@@ -259,8 +258,7 @@ int main() {
             break; //0 입력 시 종료
         }
         else if (userinput == "1") {
-            cout << "(추천) *중앙부처 - 취업 후 상환 학자금대출" << endl;
-            cout << "       *중앙부처 - 청년 취업 역량 프로그램" << endl;
+            cout << "(추천) *중앙부처/교육 - 국민 취업 지원제도" << endl;
             yp.Field();
             if (yp.getFieldPolicy() == "0")   //0  입력하면 종료
                 break;

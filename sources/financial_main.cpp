@@ -87,11 +87,18 @@ private:
     string BankType;//은행 입력 받는 변수
     string input;
     string ManuaInput; // 원하는 상품 설명 입력 받는 변수
-    //금융상품 종류 벡터
-    vector<string> FinancialItem = { "청년도약계좌", "기타금융상품","금융상품설명"};
-    //은행 벡터
+    //금융상품 종류 
+    vector<string> FinancialItem = { "청년도약계좌", "예금","적금","대출","금융상품설명"};
+    //은행 
     vector<string>  Banks = {"NH농협은행",	"신한은행","우리은행","SC제일은행","하나은행",	 "IBK기업은행",	"KB국민은행","DGB대구은행","BNK부산은행","광주은행","전북은행","BNK경남은행"};
-
+    //예금 종류
+    vector<string> Deposit = { "입출금자유예금","정기예금"};
+    //적금 종류
+    vector<string> saving = { "자유적립식","정액적립식" };
+    //금리 종류
+    vector<string> interest = {"복리","단리"};
+    //금융상품 종류
+    vector<string> Finan = { "청년도약계좌","입출금자유예금 ", "정기예금" ,"정액적립식적금","자유적립식적금","단리","복리" };
 
     
 public:
@@ -103,7 +110,7 @@ public:
     //TO DO: 세부 기능 2 : 사용자 상황 맞춤 금융 정보 출력
     // 은행명 입력 함수
     void Bank() {
-        cout << "은행을 선택하세요(종료 시 0)" << endl;
+        cout << "은행을 선택하세요" << endl;
         cout << "----------------------------------------------------------------------------------------------------------------------" << endl;
         cout << "NH농협은행 /신한은행 /우리은행 /SC제일은행 /하나은행 /IBK기업은행 /KB국민은행 /DGB대구은행 /BNK부산은행 /광주은행 /전북은행 /BNK경남은행" << endl;
         cout << "---------------------------------------------------------------------------------------------------------------------- " << endl;
@@ -119,7 +126,7 @@ public:
     void Item() {
         cout << "금융 상품을 선택하세요(종료 시 0)" << endl;
         cout << "-----------------------------------------" << endl;
-        cout << "청년도약계좌 /기타금융상품/금융상품설명" << endl;
+        cout << "청년도약계좌/예금/적금/대출/금융상품설명" << endl;
         cout << "-----------------------------------------"<< endl;
         cin >> FinancialType;
 
@@ -128,24 +135,105 @@ public:
             cin >> FinancialType;
         }
     }
+    
+    //예적금, 대출 정보는 은행연합회 정보 사용(금리 기준 2023.12.20)
+    //사용자에게 예금 종류 입력받기
+    string userdeposit; //사용자 입력 예금 종류
+    void inputdeposit() {
+        cout << "알고싶은 예금 종류를 선택하세요(종료 시 0)" << endl;
+        cout << "----------------------------------------" << endl;
+        cout << "입출금자유예금/ 정기예금" << endl;
+        cin >> userdeposit;
+       
+        //사용자 입력 유효성 검증
+        while (!isValid(userdeposit, Deposit)) {
+            cout << "잘못된 입력입니다. 다시 입력하세요." << endl;
+            cin >> userdeposit;
+        }      
+    }
+
+    //사용자에게 적금 종류 입력받기
+    void Saving() {
+        cout << "알고싶은 적금 종류를 선택하세요(종료 시 0)" << endl;
+        cout << "----------------------------------------" << endl;
+        cout << "정액적립식/ 자유적립식" << endl;
+        cin >> userdeposit;
+
+        //사용자 입력 유효성 검증
+        while (!isValid(userdeposit, saving)) {
+            cout << "잘못된 입력입니다. 다시 입력하세요." << endl;
+            cin >> userdeposit;
+        }
+    }
+
+    //사용자가 입력한 은행에 맞춘 예적금 세부 정보 출력
+    void deposit() {
+        string userinterest; //사용자 입력 금리 종류
+        //예금
+        if (userdeposit == "입출금자유예금") {
+            CSVReader csvReader("C:/Users/chee0/Downloads/freedeposit.csv"); // freedeposit.csv 파일, 본인 컴퓨터에 따라 경로 바꿔줘야 함
+            Bank();
+            csvReader.PrintValue("은행",BankType,"은행",BankType,"상품명");
+            csvReader.FreeDeposit(BankType);
+        }
+        else if (userdeposit == "정기예금") {
+            CSVReader csvReader("C:/Users/chee0/Downloads/timedeposit.csv"); // timedeposit.csv 파일, 본인 컴퓨터에 따라 경로 바꿔줘야 함
+            Bank();
+            csvReader.PrintValue("은행", BankType, "은행", BankType, "상품명");
+            csvReader.FreeDeposit(BankType);
+        }
+        
+        //적금
+        else if (userdeposit == "정액적립식") {
+            CSVReader csvReader("C:/Users/chee0/Downloads/saving.csv"); // saving.csv 파일, 본인 컴퓨터에 따라 경로 바꿔줘야 함
+            Bank();
+            csvReader.PrintValue("은행", BankType, "은행", BankType, "상품명");
+            csvReader.FreeDeposit(BankType);
+        }
+        else if (userdeposit == "자유적립식") {
+            cout << "금리 계산 방법을 선택하세요" << endl;
+            cout << "------------------------------" << endl;
+            cout << "단리/ 복리" << endl;
+            cin >> userinterest;
+            //사용자 입력 유효성 검증
+            while (!isValid(userinterest, interest)) {
+                cout << "잘못된 입력입니다. 다시 입력하세요." << endl;
+                cin >> userinterest;
+             
+            }
+            CSVReader csvReader("C:/Users/chee0/Downloads/freesaving.csv"); // freesaving.csv 파일, 본인 컴퓨터에 따라 경로 바꿔줘야 함
+            Bank();
+            csvReader.PrintValue("은행", BankType, "금리계산방법", userinterest, "상품명");
+            csvReader.FreeSaving(BankType, userinterest);
+            
+        }
+
+    }
 
     // 입력받은 은행에 맞춘 청년도약계좌 정보 출력 함수
     void FinancialShow() {
-
         CSVReader csvReader("C:/Users/chee0/Downloads/financial.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
+        Bank();
         csvReader.YouthAccount(BankType);
     }
 
 
     void ManualShow() {
-        cout << "설명을 원하는 상품을 적어주세요." << endl;
-        cout << "--------------------------" << endl;
-        cout << "청년도약계좌/기타금융상품" << endl;
-        cout << "--------------------------" << endl;
+        cout << "설명을 원하는 금융 용어를 선택해주세요." << endl;
+        cout << "-------------------------------------------------------------------------------" << endl;
+        cout << "청년도약계좌/입출금자유예금/정기예금/정액적립식적금/ 자유적립식적금/ 단리/복리" << endl;
+        cout << "-------------------------------------------------------------------------------" << endl;
         cin >> ManuaInput;
+        //사용자 입력 유효성 검증
+        while (!isValid(ManuaInput, Finan)) {
+            cout << "잘못된 입력입니다. 다시 입력하세요." << endl;
+            cin >> ManuaInput;
+        }
         CSVReader csvReader("C:/Users/chee0/Downloads/Info2.csv"); // 본인 컴퓨터에 따라 경로 바꿔줘야 함
         csvReader.FinancialManual(ManuaInput);
     }
+
+   
 
 
     // BankType 값 가져오는 함수
@@ -187,12 +275,19 @@ int main() {
             yf.Item();
             if (yf.getFinancialType() == "0")
                 break;
-            if (yf.getFinancialType() == "청년도약계좌") {
-                yf.Bank();         // Bank 함수 호출
+            else if (yf.getFinancialType() == "청년도약계좌") {
                 yf.FinancialShow();  // YouthAccount 함수 호출
             }
-            if (yf.getFinancialType() == "금융상품설명") {
+            else if (yf.getFinancialType() == "금융상품설명") {
                 yf.ManualShow();  // YouthManual 함수 호출
+            }
+            else if (yf.getFinancialType() == "예금") {
+                yf.inputdeposit(); 
+                yf.deposit(); //Freedepoist 함수 호출
+            }
+            else if (yf.getFinancialType() == "적금") {
+                yf.Saving();
+                yf.deposit(); //Freedepoist 함수 호출
             }
         }
         else {
